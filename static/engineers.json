@@ -1,0 +1,24 @@
+{
+  "engineers": [
+    {
+      "id": "HX43690",
+      "name": "Ринат Закиров",
+      "login": "zakirov"
+    },
+    {
+      "id": "H164031",
+      "name": "Алексей Иващенко",
+      "login": "ivashchenko"
+    },
+    {
+      "id": "H78213",
+      "name": "Алексей Полюдов",
+      "login": "polyudov"
+    },
+    {
+      "id": "HX8213",
+      "name": "Евгений Воробьев",
+      "login": "sparrow"
+    }
+  ]
+}

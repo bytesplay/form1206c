@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Генератор формы FO-RUS-BUR-QHSE-1206C</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+    <div class="container fade-in">
+
+        <!-- ==========================================
+        ЗАГОЛОВОК
+        ========================================== -->
+        <div class="header">
+            <h1>📋 Генератор <span>FO-RUS-BUR-QHSE-1206C</span></h1>
+            <div class="subtitle">Автоматическое формирование акта перевозки радиоактивных материалов</div>
+        </div>
+
+        <!-- ==========================================
+        УВЕДОМЛЕНИЯ
+        ========================================== -->
+        <div id="alertContainer"></div>
+
+        <!-- ==========================================
+        ФОРМА
+        ========================================== -->
+        <form id="reportForm">
+
+            <!-- ======== Секция 1: Передача РМ ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    📦 Передача РМ
+                    <span class="badge">Обязательно</span>
+                </div>
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Место отправки <span class="required">*</span></label>
+                        <input type="text" name="place_from" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Место получения <span class="required">*</span></label>
+                        <input type="text" name="place_to" id="placeTo" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Номер работы (отправка) <span class="required">*</span></label>
+                        <input type="text" name="job_from" id="jobFrom" inputmode="numeric" required placeholder="7163 000 543" />
+                        <small style="color: #6b7a8a; font-size: 12px; margin-top: 4px;">Формат: 7163 XXX XXX (Например, 7163 000 639)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Номер работы (получение)</label>
+                        <input type="text" name="job_to" id="jobTo" inputmode="numeric" placeholder="7163 000 543" />
+                        <small style="color: #6b7a8a; font-size: 12px; margin-top: 4px;">Формат: 7163 XXX XXX (необязательно)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Отправляющий инженер <span class="required">*</span></label>
+                        <select name="engineer_from_login" id="engineerFrom" required>
+                            <option value="">Выберите инженера</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Принимающий инженер <span class="required">*</span></label>
+                        <select name="engineer_to_login" id="engineerTo" required>
+                            <option value="">Выберите инженера</option>
+                        </select>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ======== Секция 2: Проверка упаковки ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    ✅ Проверка упаковки и документации
+                    <span class="badge blue">Чекбоксы</span>
+                </div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="check_package" checked />
+                        <label for="check_package">РМ проверены по отгрузочной документации</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="check_classification" checked />
+                        <label for="check_classification">Надлежащая классификация и маркировка</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="check_dosimeter" checked />
+                        <label for="check_dosimeter">Дозиметр откалиброван и исправен</label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======== Секция 3: Замеры ТУК (таблица) ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    📊 Радиологические замеры ТУК
+                    <span class="badge">Таблица</span>
+                </div>
+
+                <div class="table-container">
+                    <table class="sources-table" id="sourcesTable">
+                        <thead>
+                            <tr>
+                                <th style="width:15%;">Тип</th>
+                                <th style="width:15%;">Активность</th>
+                                <th style="width:15%;">Номер</th>
+                                <th style="width:20%;">Макс. излучение, µSv/hr</th>
+                                <th style="width:15%;">Трансп. индекс (ТИ)</th>
+                                <th style="width:10%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="sourcesBody">
+                            <!-- Строки добавляются скриптом -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <button type="button" class="btn-add-row" id="addSourceBtn">➕ Добавить источник</button>
+            </section>
+
+            <!-- ======== Секция 4: Замеры ТС ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    🚛 Радиологические замеры ТС
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Излучение в кабине водителя, µSv/hr <span class="required">*</span></label>
+                        <input type="number" name="cab_radiation" step="0.1" required />
+                        <small style="color: #6b7a8a; font-size: 12px; margin-top: 4px;">Норм. требование, не более 12 µSv/hr</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Макс. излучение на поверхности ТС, µSv/hr <span class="required">*</span></label>
+                        <input type="number" name="surface_radiation" step="1" required />
+                        <small style="color: #6b7a8a; font-size: 12px; margin-top: 4px;">Норм. требование, не более 2000 µSv/hr</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======== Секция 5: Дозиметр ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    📡 Данные дозиметра
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Модель <span class="required">*</span></label>
+                        <input type="text" name="dosimeter_model" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Серийный номер (S/N) <span class="required">*</span></label>
+                        <input type="text" name="dosimeter_sn" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Дата калибровки <span class="required">*</span></label>
+                        <input type="date" name="dosimeter_calibration" required />
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======== Секция 6: Упаковка типа А ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    📦 Упаковка типа А
+                    <span class="badge blue">Да / Нет / НП</span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Излучение ≤ 2000 µSv/hr</label>
+                        <select name="typeA_radiation">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Транспортный индекс ≤ 10</label>
+                        <select name="typeA_ti">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Полное имя, адрес, телефон</label>
+                        <select name="typeA_address">
+                            <option value="na">☒ НП</option>
+                            <option value="yes">☐ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Номер экстренной помощи</label>
+                        <select name="typeA_emergency">
+                            <option value="na">☒ НП</option>
+                            <option value="yes">☐ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Этикетка «РАДИОАКТИВНО»</label>
+                        <select name="typeA_label_radio">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Категория этикетки</label>
+                        <select name="typeA_label_radio_type">
+                            <option value="Yellow III">☒ Yellow III</option>
+                            <option value="Yellow II">☐ Yellow II</option>
+                            <option value="White I">☐ White I</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Номер ООН и наименование</label>
+                        <select name="typeA_oon">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Этикетка «DOT Type A»</label>
+                        <select name="typeA_dot">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Этикетка «Assay Tag»</label>
+                        <select name="typeA_assay">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Вес в кг</label>
+                        <select name="typeA_weight">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Стрелки ориентации</label>
+                        <select name="typeA_arrows">
+                            <option value="na">☒ НП</option>
+                            <option value="yes">☐ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>«Cargo Aircraft Only»</label>
+                        <select name="typeA_cargo">
+                            <option value="na">☒ НП</option>
+                            <option value="yes">☐ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Замок</label>
+                        <select name="typeA_lock">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Защитная пломба</label>
+                        <select name="typeA_seal">
+                            <option value="yes">☒ Да</option>
+                            <option value="no">☐ НЕТ</option>
+                            <option value="na">☐ НП</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======== Секция 7: Место хранения ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    🏗️ Место хранения РМ
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Назначенное место хранения <span class="required">*</span></label>
+                        <input type="text" name="storage_place" id="storagePlace" required readonly />
+                        <small style="color: #6b7a8a; font-size: 12px; margin-top: 4px;">Обычно совпадает с местом получения</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ======== Секция 8: Фотографии ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    📷 Фотографии
+                    <span class="badge blue">Необязательно</span>
+                    <span id="photoCounter" style="margin-left:auto; font-size:13px; color:#6b7a8a; font-weight:500;">0 файлов</span>
+                </div>
+
+                <div id="dropzone" class="dropzone">
+                    <div class="dropzone-icon">📁</div>
+                    <div class="dropzone-text">
+                        Перетащите изображения сюда<br>
+                        <span class="dropzone-hint">или нажмите, чтобы выбрать файлы</span>
+                    </div>
+                    <input
+                        type="file"
+                        id="photoInput"
+                        name="photos"
+                        accept="image/*"
+                        multiple
+                        hidden
+                    />
+                </div>
+
+                <div id="photoPreview" class="photo-preview"></div>
+
+                <div class="photo-actions">
+                    <button type="button" class="btn btn-outline btn-small" id="clearPhotosBtn">
+                        🗑️ Очистить все фото
+                    </button>
+                </div>
+            </section>
+
+            <!-- ======== Секция 9: Подписи сторон ======== -->
+            <section class="form-section">
+                <div class="form-section-title">
+                    ✍️ Подписи сторон
+                    <span class="badge">Отправка и получение</span>
+                </div>
+                
+                <div style="margin-bottom: 20px; font-weight: 600; color: #2a6f97;">Отправляющая сторона</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>User ID <span class="required">*</span></label>
+                        <input type="text" name="user_id_from" id="userIdFrom" required readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО инженера <span class="required">*</span></label>
+                        <input type="text" name="engineer_from_name" id="engineerFromName" required readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Дата <span class="required">*</span></label>
+                        <input type="date" name="date_from" id="dateFrom" required />
+                    </div>
+                </div>
+
+                <div style="margin: 20px 0 20px 0; font-weight: 600; color: #2a6f97;">Принимающая сторона</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>User ID <span class="required">*</span></label>
+                        <input type="text" name="user_id_to" id="userIdTo" required readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО инженера <span class="required">*</span></label>
+                        <input type="text" name="engineer_to_name" id="engineerToName" required readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Дата <span class="required">*</span></label>
+                        <input type="date" name="date_to" id="dateTo" required />
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+            КНОПКИ ДЕЙСТВИЙ
+            ========================================== -->
+            <div class="actions">
+                <button type="button" class="btn btn-primary" id="submitBtn">
+                    ⚡ Сгенерировать DOCX
+                </button>
+                <button type="reset" class="btn btn-outline">
+                    🔄 Сбросить форму
+                </button>
+            </div>
+
+            <!-- Прогресс-бар -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Подготовка...</div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

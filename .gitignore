@@ -1,0 +1,37 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+ENV/
+*.egg-info/
+.pytest_cache/
+
+# --- IDE и редакторы ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Секреты и окружение ---
+.env
+.env.local
+.env.*.local
+
+# --- Логи ---
+*.log
+logs/
+
+# --- Временные файлы проекта ---
+output_*.docx
+FO-RUS-BUR-QHSE-1206C_*.docx
+uploads/
+temp/
+tmp/
