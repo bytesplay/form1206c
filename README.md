@@ -1,5 +1,11 @@
 # FO-RUS-BUR-QHSE-1206C Generator
 
+## 🌐 Живой сервис
+
+**URL:** https://form1206c-kamal-shrikant.amvera.io/ (замени на свой)
+
+Развёрнут на [Amvera](https://amvera.ru).
+
 Веб-приложение для автоматического формирования акта перевозки
 радиоактивных материалов (форма FO-RUS-BUR-QHSE-1206C).
 
