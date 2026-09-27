@@ -11,14 +11,19 @@
       "login": "ivashchenko"
     },
     {
-      "id": "H78213",
+      "id": "H178213",
       "name": "Алексей Полюдов",
       "login": "polyudov"
     },
     {
-      "id": "HX8213",
+      "id": "H325647",
       "name": "Евгений Воробьев",
       "login": "sparrow"
+    },
+    {
+      "id": "HX38506",
+      "name": "Артем Трибуль",
+      "login": "tribul"
     }
   ]
 }
